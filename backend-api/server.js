@@ -777,12 +777,13 @@ app.get('*', (req, res) => {
   // Only serve index.html if the request is not for an API route
   if (!req.path.startsWith('/api')) {
     const indexPath = path.join(__dirname, 'public', 'index.html');
-    if (fs.existsSync(indexPath)) {
-      res.sendFile(indexPath);
-    } else {
-      // Fallback if no React build is present
-      res.status(404).send('React app not found. Please ensure the frontend is built.');
-    }
+    // Try to serve the index.html file
+    res.sendFile(indexPath, (err) => {
+      if (err) {
+        // Fallback if no React build is present
+        res.status(404).send('React app not found. Please ensure the frontend is built.');
+      }
+    });
   } else {
     res.status(404).json({ 
       success: false, 
