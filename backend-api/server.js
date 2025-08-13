@@ -21,6 +21,12 @@ const publicPath = path.join(__dirname, 'public');
 console.log(`📁 Serving static files from: ${publicPath}`);
 app.use(express.static(publicPath));
 
+// Explicit root route to serve index.html
+app.get('/', (req, res) => {
+  console.log('Root route hit - serving index.html');
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 // Debug route to check if files exist
 app.get('/debug/files', (req, res) => {
   const fs = require('fs');
@@ -879,10 +885,12 @@ const initializeSampleData = () => {
 };
 
 // Start server
-app.listen(PORT, '0.0.0.0', () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 TaskTurkey Pro Backend Server running on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔗 Frontend URL: ${process.env.FRONTEND_URL || 'http://0.0.0.0:3000'}`);
+  console.log(`📁 Serving static files from: ${publicPath}`);
+  console.log(`✅ Server successfully started and listening`);
   
   // Initialize sample data
   initializeSampleData();
