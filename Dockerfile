@@ -42,8 +42,8 @@ RUN echo "📦 Installing backend dependencies..." && \
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nodejs -u 1001
 
-# Copy built frontend to backend's public directory
-COPY --from=frontend-builder /frontend/build ./public
+# Copy the actual TaskTurkey Pro demo (bypass React build for now)
+COPY taskturkey-pro/demo ./public
 
 # Fix ownership of everything including the newly copied files
 RUN chown -R nodejs:nodejs /project
