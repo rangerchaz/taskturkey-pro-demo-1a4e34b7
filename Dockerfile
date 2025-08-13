@@ -15,7 +15,11 @@ RUN npm install
 COPY frontend-app/ ./
 
 # Build the React app
-RUN npm run build
+RUN npm run build && \
+    echo "📁 Contents of /frontend after build:" && \
+    ls -la /frontend/ && \
+    echo "📁 Contents of /frontend/build (if exists):" && \
+    ls -la /frontend/build/ || echo "No build directory found"
 
 # Stage 2: Setup backend and serve frontend
 FROM node:18-alpine as production
@@ -36,6 +40,10 @@ RUN echo "📦 Installing backend dependencies..." && \
 
 # Copy built frontend to backend's public directory
 COPY --from=frontend-builder /frontend/build ./public
+
+# Debug: Check if public directory has the React build
+RUN echo "📁 Contents of /project/backend-api/public after copying React build:" && \
+    ls -la /project/backend-api/public/ || echo "Public directory not found or empty"
 
 # Verify installation
 RUN echo "🔍 Verifying installation..." && \

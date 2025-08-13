@@ -780,8 +780,23 @@ app.get('*', (req, res) => {
     // Try to serve the index.html file
     res.sendFile(indexPath, (err) => {
       if (err) {
-        // Fallback if no React build is present
-        res.status(404).send('React app not found. Please ensure the frontend is built.');
+        // Debug information about what's missing
+        const publicPath = path.join(__dirname, 'public');
+        const debugInfo = `
+          <!DOCTYPE html>
+          <html>
+          <head><title>Debug Info</title></head>
+          <body>
+            <h1>React App Not Found</h1>
+            <p>Looking for: ${indexPath}</p>
+            <p>Public directory: ${publicPath}</p>
+            <p>__dirname: ${__dirname}</p>
+            <p>Error: ${err.message}</p>
+            <p>Working directory: ${process.cwd()}</p>
+          </body>
+          </html>
+        `;
+        res.status(404).send(debugInfo);
       }
     });
   } else {
