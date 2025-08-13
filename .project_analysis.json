@@ -1,0 +1,19 @@
+{
+  "type": "fullstack_react_node",
+  "deployment_strategy": "separate_deployments",
+  "has_react": true,
+  "has_node_backend": true,
+  "has_react_native": false,
+  "has_expo": false,
+  "has_flutter": false,
+  "has_frontend_app": true,
+  "has_backend_api": true,
+  "frontend_package_json": true,
+  "backend_package_json": true,
+  "files": {
+    "frontend": 8,
+    "backend": 1,
+    "mobile": 0,
+    "design": 0
+  }
+}

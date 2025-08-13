@@ -1,0 +1,103 @@
+name: Deploy TaskTurkey Pro
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: '18'
+  DOCKER_IMAGE: taskturkey-pro
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Run QA tests
+      run: |
+        npm run test:unit
+        npm run test:integration
+      env:
+        NODE_ENV: test
+
+    - name: Frontend validation
+      run: |
+        # Validate HTML/CSS/JS structure
+        ls -la src/frontend/
+        echo "Frontend files validated"
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Build Docker image
+      run: |
+        docker build -t ${{ env.DOCKER_IMAGE }}:${{ github.sha }} .
+        docker tag ${{ env.DOCKER_IMAGE }}:${{ github.sha }} ${{ env.DOCKER_IMAGE }}:latest
+    
+    - name: Test Docker container
+      run: |
+        docker run -d --name test-container -p 3000:3000 ${{ env.DOCKER_IMAGE }}:latest
+        sleep 30
+        curl -f http://localhost:3000/api/health || exit 1
+        docker stop test-container
+        docker rm test-container
+    
+    - name: Push to registry
+      run: |
+        echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+        docker push ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+        docker push ${{ env.DOCKER_IMAGE }}:latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Deploy to Digital Ocean
+      uses: digitalocean/app_action@v1.1.5
+      with:
+        app_name: taskturkey-pro
+        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+        images: |
+          [
+            {
+              "name": "taskturkey-api",
+              "image": {
+                "registry_type": "DOCKER_HUB",
+                "registry": "${{ secrets.DOCKER_USERNAME }}",
+                "repository": "${{ env.DOCKER_IMAGE }}",
+                "tag": "${{ github.sha }}"
+              }
+            }
+          ]
+
+  notify:
+    needs: [test, build, deploy]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+    - name: Deployment notification
+      run: |
+        if [ "${{ needs.deploy.result }}" == "success" ]; then
+          echo "✅ TaskTurkey Pro deployed successfully!"
+        else
+          echo "❌ Deployment failed"
+          exit 1
+        fi

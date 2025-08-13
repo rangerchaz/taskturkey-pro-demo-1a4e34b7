@@ -1,0 +1,84 @@
+<!-- design/components/navigation.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Component - TaskTurkey Pro</title>
+    <link rel="stylesheet" href="../system/tokens.css">
+    <link rel="stylesheet" href="../system/layout.css">
+    <link rel="stylesheet" href="../system/components.css">
+    <link rel="stylesheet" href="../system/animations.css">
+</head>
+<body style="background-color: var(--color-gray-50); padding: var(--space-6);">
+
+<h2 class="heading-2">Navigation Components</h2>
+
+<!-- Main Navigation -->
+<div class="card mb-6">
+    <h3 class="heading-3">Main Navigation</h3>
+    <nav class="sidebar" style="width: 240px; height: auto; grid-row: auto;">
+        <div class="p-4">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="avatar">TT</div>
+                <span class="font-weight-semibold">TaskTurkey Pro</span>
+            </div>
+            
+            <ul class="nav-list">
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        </svg>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-4"/>
+                            <path d="M9 7V3a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"/>
+                        </svg>
+                        Tasks
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                        Team
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 3v5h5"/>
+                            <path d="M3 8a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 4"/>
+                        </svg>
+                        Analytics
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<!-- Breadcrumb Navigation -->
+<div class="card">
+    <h3 class="heading-3">Breadcrumb Navigation</h3>
+    <nav class="flex items-center gap-2 text-sm">
+        <a href="#" class="text-primary hover:text-primary-dark transition-colors">Dashboard</a>
+        <span class="text-gray-400">/</span>
+        <a href="#" class="text-primary hover:text-primary-dark transition-colors">Projects</a>
+        <span class="text-gray-400">/</span>
+        <span class="text-gray-600">Website Redesign</span>
+    </nav>
+</div>
+
+</body>
+</html>

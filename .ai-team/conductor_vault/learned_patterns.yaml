@@ -1,0 +1,23 @@
+---
+minimal_clinical:
+  :successes: 0
+  :failures: 1
+  :common_issues:
+  - 'Semantic Compliance: Demo missing registered button class: .btn-primary'
+  - 'Semantic Compliance: Demo missing registered color: var(--color-black)'
+  - 'Semantic Compliance: Error checking semantic compliance: invalid byte sequence
+    in US-ASCII'
+  - 'Design Consistency: Demo uses hardcoded colors instead of design tokens'
+  - 'Integration Quality: Frontend doesn''t appear to integrate with backend APIs'
+  - 'Accessibility: Error checking accessibility: invalid byte sequence in US-ASCII'
+web:
+  :successes: 0
+  :failures: 1
+  :common_issues:
+  - 'Semantic Compliance: Demo missing registered button class: .btn-primary'
+  - 'Semantic Compliance: Demo missing registered color: var(--color-black)'
+  - 'Semantic Compliance: Error checking semantic compliance: invalid byte sequence
+    in US-ASCII'
+  - 'Design Consistency: Demo uses hardcoded colors instead of design tokens'
+  - 'Integration Quality: Frontend doesn''t appear to integrate with backend APIs'
+  - 'Accessibility: Error checking accessibility: invalid byte sequence in US-ASCII'

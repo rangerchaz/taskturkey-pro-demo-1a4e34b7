@@ -1,0 +1,19 @@
+---
+:css_classes:
+  button_class:
+    :value: ".btn-primary"
+    :timestamp: '2025-08-13T16:40:47+00:00'
+    :updated_count: 2
+  card_class:
+    :value: ".task-card"
+    :timestamp: '2025-08-13T16:40:47+00:00'
+    :updated_count: 2
+  nav_class:
+    :value: ".nav-list"
+    :timestamp: '2025-08-13T16:40:47+00:00'
+    :updated_count: 2
+:conventions:
+  css_naming_pattern:
+    :value: component-based
+    :timestamp: '2025-08-13T16:40:47+00:00'
+    :updated_count: 1

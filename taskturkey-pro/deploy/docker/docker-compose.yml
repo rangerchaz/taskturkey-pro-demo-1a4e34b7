@@ -1,0 +1,66 @@
+# Digital Ocean App Platform configuration
+# Optimized for HTML/CSS/JS + Node.js backend architecture
+name: taskturkey-pro
+region: nyc
+
+services:
+- name: taskturkey-api
+  source_dir: /
+  github:
+    repo: your-org/taskturkey-pro
+    branch: main
+  run_command: node server.js
+  environment_slug: node-js
+  instance_count: 2
+  instance_size_slug: basic-xxs
+  
+  envs:
+  - key: NODE_ENV
+    value: production
+  - key: PORT
+    value: "8080"
+  - key: DB_CONNECTION_POOL_SIZE
+    value: "20"
+  
+  health_check:
+    http_path: /api/health
+    initial_delay_seconds: 10
+    period_seconds: 30
+    timeout_seconds: 5
+    success_threshold: 1
+    failure_threshold: 3
+
+  routes:
+  - path: /api
+  - path: /
+    preserve_path_prefix: false
+
+  # Auto-scaling configuration
+  autoscaling:
+    min_instance_count: 1
+    max_instance_count: 5
+    metrics:
+    - type: cpu
+      value:
+        average_utilization: 70
+    - type: memory
+      value:
+        average_utilization: 80
+
+# Static assets CDN optimization
+static_sites:
+- name: taskturkey-assets
+  source_dir: /src/frontend
+  index_document: index.html
+  error_document: index.html
+  routes:
+  - path: /assets
+  - path: /static
+
+# Database (if needed)
+databases:
+- name: taskturkey-db
+  engine: PG
+  version: "13"
+  size: db-s-1vcpu-1gb
+  num_nodes: 1

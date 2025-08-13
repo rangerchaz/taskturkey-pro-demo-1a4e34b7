@@ -1,0 +1,31 @@
+---
+:primary_button:
+  :implementation: ".btn-primary"
+  :registered_by: designer
+  :timestamp: '2025-08-13T16:40:47+00:00'
+  :usage_count: 2
+:card_component:
+  :implementation: ".task-card"
+  :registered_by: designer
+  :timestamp: '2025-08-13T16:40:47+00:00'
+  :usage_count: 2
+:navigation:
+  :implementation: ".nav-list"
+  :registered_by: designer
+  :timestamp: '2025-08-13T16:40:47+00:00'
+  :usage_count: 2
+:primary_text_color:
+  :implementation: var(--color-black)
+  :registered_by: designer
+  :timestamp: '2025-08-13T16:40:47+00:00'
+  :usage_count: 2
+:design_approach:
+  :implementation: minimal_clinical
+  :registered_by: designer
+  :timestamp: '2025-08-13T16:40:47+00:00'
+  :usage_count: 1
+:css_architecture:
+  :implementation: modular-with-tokens
+  :registered_by: designer
+  :timestamp: '2025-08-13T16:40:47+00:00'
+  :usage_count: 1
