@@ -27,6 +27,16 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Version endpoint to verify deployment
+app.get('/version', (req, res) => {
+  res.json({
+    version: '2.0.0',
+    timestamp: new Date().toISOString(),
+    message: 'This is the NEW server with React support',
+    serverFile: __filename
+  });
+});
+
 // Debug route to check if files exist
 app.get('/debug/files', (req, res) => {
   const fs = require('fs');

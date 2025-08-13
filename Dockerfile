@@ -77,5 +77,8 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
 
 # Remove fallback server - we'll run the main server directly
 
-# Start the server directly
-CMD ["node", "server.js"]
+# Force rebuild with timestamp
+RUN echo "Build timestamp: $(date)" > /project/backend-api/build-info.txt
+
+# Start the server directly with explicit path
+CMD ["node", "/project/backend-api/server.js"]
