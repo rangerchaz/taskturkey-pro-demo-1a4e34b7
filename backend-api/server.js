@@ -16,6 +16,9 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+// Serve static files from React build
+app.use(express.static(path.join(__dirname, 'public')));
+
 // In-memory data store (production would use a database)
 let users = [];
 let teams = [];
@@ -768,13 +771,25 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// 404 handler
-app.use('*', (req, res) => {
-  res.status(404).json({
-    success: false,
-    error: 'Endpoint not found',
-    code: 'NOT_FOUND'
-  });
+// Serve React app for all non-API routes (client-side routing)
+// This must come after all API routes
+app.get('*', (req, res) => {
+  // Only serve index.html if the request is not for an API route
+  if (!req.path.startsWith('/api')) {
+    const indexPath = path.join(__dirname, 'public', 'index.html');
+    if (fs.existsSync(indexPath)) {
+      res.sendFile(indexPath);
+    } else {
+      // Fallback if no React build is present
+      res.status(404).send('React app not found. Please ensure the frontend is built.');
+    }
+  } else {
+    res.status(404).json({ 
+      success: false, 
+      error: 'API endpoint not found',
+      code: 'NOT_FOUND'
+    });
+  }
 });
 
 // Global error handler
@@ -830,7 +845,7 @@ const initializeSampleData = () => {
 };
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 TaskTurkey Pro Backend Server running on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔗 Frontend URL: ${process.env.FRONTEND_URL || 'http://0.0.0.0:3000'}`);
