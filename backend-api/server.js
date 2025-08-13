@@ -889,7 +889,7 @@ const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 TaskTurkey Pro Backend Server running on port ${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔗 Frontend URL: ${process.env.FRONTEND_URL || 'http://0.0.0.0:3000'}`);
-  console.log(`📁 Serving static files from: ${publicPath}`);
+  console.log(`📁 Serving static files from: ${path.join(__dirname, 'public')}`);
   console.log(`✅ Server successfully started and listening`);
   
   // Initialize sample data
