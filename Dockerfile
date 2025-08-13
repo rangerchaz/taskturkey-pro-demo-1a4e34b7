@@ -20,6 +20,9 @@ RUN npm run build
 # Stage 2: Setup backend and serve frontend
 FROM node:18-alpine as production
 
+# Install wget for health checks
+RUN apk add --no-cache wget
+
 WORKDIR /project
 
 # Copy the entire project structure to preserve relative imports
@@ -76,10 +79,7 @@ RUN echo '#!/bin/sh' > /project/backend-api/start.sh && \
     echo '  node /project/backend-api/fallback-server.js' >> /project/backend-api/start.sh && \
     echo 'else' >> /project/backend-api/start.sh && \
     echo '  echo "✅ Syntax OK, starting original server.js"' >> /project/backend-api/start.sh && \
-    echo '  timeout 30 node server.js || {' >> /project/backend-api/start.sh && \
-    echo '    echo "❌ Original server failed, using fallback"' >> /project/backend-api/start.sh && \
-    echo '    node /project/backend-api/fallback-server.js' >> /project/backend-api/start.sh && \
-    echo '  }' >> /project/backend-api/start.sh && \
+    echo '  node server.js' >> /project/backend-api/start.sh && \
     echo 'fi' >> /project/backend-api/start.sh && \
     chmod +x /project/backend-api/start.sh
 
