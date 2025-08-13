@@ -38,8 +38,15 @@ RUN echo "📦 Installing backend dependencies..." && \
     npm install --only=production && \
     echo "✅ Dependencies installed successfully"
 
+# Create non-root user FIRST
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001
+
 # Copy built frontend to backend's public directory
 COPY --from=frontend-builder /frontend/build ./public
+
+# Fix ownership of everything including the newly copied files
+RUN chown -R nodejs:nodejs /project
 
 # Debug: Check if public directory has the React build
 RUN echo "📁 Contents of /project/backend-api/public after copying React build:" && \
@@ -55,11 +62,6 @@ RUN echo "🔍 Verifying installation..." && \
     ls -la /project/backend-api && \
     echo "📁 Public directory:" && \
     ls -la /project/backend-api/public
-
-# Create non-root user
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nodejs -u 1001 && \
-    chown -R nodejs:nodejs /project
 
 USER nodejs
 

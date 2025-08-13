@@ -17,7 +17,27 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from React build
-app.use(express.static(path.join(__dirname, 'public')));
+const publicPath = path.join(__dirname, 'public');
+console.log(`📁 Serving static files from: ${publicPath}`);
+app.use(express.static(publicPath));
+
+// Debug route to check if files exist
+app.get('/debug/files', (req, res) => {
+  const fs = require('fs');
+  const indexPath = path.join(__dirname, 'public', 'index.html');
+  const publicExists = fs.existsSync(publicPath);
+  const indexExists = fs.existsSync(indexPath);
+  
+  res.json({
+    publicPath,
+    publicExists,
+    indexPath,
+    indexExists,
+    dirname: __dirname,
+    cwd: process.cwd(),
+    files: publicExists ? fs.readdirSync(publicPath) : []
+  });
+});
 
 // In-memory data store (production would use a database)
 let users = [];
