@@ -39,6 +39,18 @@ app.get('/debug/files', (req, res) => {
   });
 });
 
+// Debug route to see actual index.html content
+app.get('/debug/index', (req, res) => {
+  const fs = require('fs');
+  const indexPath = path.join(__dirname, 'public', 'index.html');
+  if (fs.existsSync(indexPath)) {
+    const content = fs.readFileSync(indexPath, 'utf8');
+    res.type('text/plain').send(content);
+  } else {
+    res.status(404).send('index.html not found');
+  }
+});
+
 // In-memory data store (production would use a database)
 let users = [];
 let teams = [];
@@ -791,41 +803,27 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Serve React app for all non-API routes (client-side routing)
-// This must come after all API routes
-app.get('*', (req, res) => {
-  // Only serve index.html if the request is not for an API route
-  if (!req.path.startsWith('/api')) {
-    const indexPath = path.join(__dirname, 'public', 'index.html');
-    // Try to serve the index.html file
-    res.sendFile(indexPath, (err) => {
-      if (err) {
-        // Debug information about what's missing
-        const publicPath = path.join(__dirname, 'public');
-        const debugInfo = `
-          <!DOCTYPE html>
-          <html>
-          <head><title>Debug Info</title></head>
-          <body>
-            <h1>React App Not Found</h1>
-            <p>Looking for: ${indexPath}</p>
-            <p>Public directory: ${publicPath}</p>
-            <p>__dirname: ${__dirname}</p>
-            <p>Error: ${err.message}</p>
-            <p>Working directory: ${process.cwd()}</p>
-          </body>
-          </html>
-        `;
-        res.status(404).send(debugInfo);
-      }
-    });
-  } else {
-    res.status(404).json({ 
+// Catch all handler for React client-side routing
+// This should come LAST, after all API routes
+app.get('*', (req, res, next) => {
+  // Skip API routes
+  if (req.path.startsWith('/api') || req.path.startsWith('/debug')) {
+    return res.status(404).json({ 
       success: false, 
       error: 'API endpoint not found',
       code: 'NOT_FOUND'
     });
   }
+  
+  // For all other routes, serve the React app
+  // This enables client-side routing
+  const indexPath = path.join(__dirname, 'public', 'index.html');
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      console.error('Error serving index.html:', err);
+      res.status(500).send('Error loading application');
+    }
+  });
 });
 
 // Global error handler
