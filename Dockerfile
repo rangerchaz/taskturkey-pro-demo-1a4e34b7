@@ -79,7 +79,7 @@ RUN echo '#!/bin/sh' > /project/backend-api/start.sh && \
     echo '  node /project/backend-api/fallback-server.js' >> /project/backend-api/start.sh && \
     echo 'else' >> /project/backend-api/start.sh && \
     echo '  echo "✅ Syntax OK, starting original server.js"' >> /project/backend-api/start.sh && \
-    echo '  node server.js' >> /project/backend-api/start.sh && \
+    echo '  exec node server.js' >> /project/backend-api/start.sh && \
     echo 'fi' >> /project/backend-api/start.sh && \
     chmod +x /project/backend-api/start.sh
 

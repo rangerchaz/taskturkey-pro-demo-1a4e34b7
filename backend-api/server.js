@@ -850,10 +850,8 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔗 Frontend URL: ${process.env.FRONTEND_URL || 'http://0.0.0.0:3000'}`);
   
-  // Initialize sample data in development
-  if (process.env.NODE_ENV !== 'production') {
-    initializeSampleData();
-  }
+  // Initialize sample data
+  initializeSampleData();
 });
 
 // Graceful shutdown
